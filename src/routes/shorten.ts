@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { pool } from '../config/db';
-import { encodeBase62 } from '../utils/base62';
+import { pool } from '../config/db.js';
+import { encodeBase62 } from '../utils/base62.js';
 
 const router = Router();
 

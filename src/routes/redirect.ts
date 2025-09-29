@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { redis } from '../config/redis';
-import {pool} from '../config/db';
+import { redis } from '../config/redis.js';
+import {pool} from '../config/db.js';
 
 const router = Router();
 
