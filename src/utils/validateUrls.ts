@@ -1,4 +1,4 @@
-export function isValidUUrl(url: string): boolean {
+export function isValidUrl(url: string): boolean {
     try {
         const parsed = new URL(url);
 
