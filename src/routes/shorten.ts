@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { pool } from '../config/db.js';
 import { encodeBase62 } from '../utils/base62.js';
 import { isValidUrl } from '../utils/validateUrls.js';
+import { isSafeUrl } from '../utils/isSafeUrl.js';
 const router = Router();
 
 router.post('/', async (req: any, res: any) => {
@@ -15,6 +16,10 @@ router.post('/', async (req: any, res: any) => {
         return res.status(400).json({error: 'Invalid Url Format. Only http and https are supported'});
     }
 
+    const safe = await isSafeUrl(long_url);
+    if (!safe) {
+        return res.status(400).json({error: 'URL points to a private IP address or hostname. Please use a public URL'});
+    }
     const client = await pool.connect();
 
     try {
