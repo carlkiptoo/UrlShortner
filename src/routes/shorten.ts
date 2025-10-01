@@ -6,19 +6,20 @@ import { isSafeUrl } from '../utils/isSafeUrl.js';
 const router = Router();
 
 router.post('/', async (req: any, res: any) => {
-    const {long_url} = req.body;
+    const { long_url } = req.body;
 
     if (!long_url) {
-        return res.status(400).json({error: 'long_url is required'});
+        return res.status(400).json({ error: 'long_url is required' });
     }
 
     if (!isValidUrl(long_url)) {
-        return res.status(400).json({error: 'Invalid Url Format. Only http and https are supported'});
+        return res.status(400).json({ error: 'Invalid Url Format. Only http and https are supported' });
     }
 
     const safe = await isSafeUrl(long_url);
+
     if (!safe) {
-        return res.status(400).json({error: 'URL points to a private IP address or hostname. Please use a public URL'});
+        return res.status(400).json({ error: 'URL points to a private IP address or hostname. Please use a public URL' });
     }
     const client = await pool.connect();
 
@@ -35,11 +36,11 @@ router.post('/', async (req: any, res: any) => {
         await client.query("UPDATE urls SET short_code = $1 WHERE id = $2", [short_code, id]);
         await client.query('COMMIT');
 
-        res.json({short_code: short_code, short_url: `http://localhost:3000/${short_code}`});
+        res.json({ short_code: short_code, short_url: `http://localhost:3000/${short_code}` });
     } catch (error) {
         await client.query('ROLLBACK');
         console.error(error);
-        res.status(500).json({error: 'Internal Server Error'});
+        res.status(500).json({ error: 'Internal Server Error' });
     } finally {
         client.release();
     }

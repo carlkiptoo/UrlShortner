@@ -25,4 +25,13 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
     res.status(500).json({error: 'Internal Server Error'});
 })
 
+process.on('uncaughtException', (error) => {
+    logger.error(`Uncaught Exception: ${error.message}`, {stack: error.stack});
+    process.exit(1)
+});
+
+process.on('unhandledRejection', (reason: any) => {
+    logger.error(`Unhandled Rejection: ${reason?.message || reason}`, {reason});
+})
+
 export default app;
